@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AI Email Generator</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', path='style.css') }}">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class="header">
+            <div class="icon">✉️</div>
+
+            <h1>AI Email Generator</h1>
+
+            <p>
+                Generate professional and personalized emails using AI
+            </p>
+        </div>
+
+
+        <div class="content">
+
+            <!-- Input Form -->
+            <div class="form-section">
+
+                <h2>Create Your Email</h2>
+
+                <form action="/generate" method="post">
+
+                    <label for="recipient">
+                        Recipient Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="recipient"
+                        name="recipient"
+                        placeholder="e.g. Mr. Ahmed Khan"
+                        value="{{ recipient }}"
+                        required
+                    >
+
+
+                    <label for="purpose">
+                        Email Purpose
+                    </label>
+
+                    <textarea
+                        id="purpose"
+                        name="purpose"
+                        rows="5"
+                        placeholder="Describe what you want to write about..."
+                        required
+                    >{{ purpose }}</textarea>
+
+
+                    <label for="tone">
+                        Select Tone
+                    </label>
+
+                    <select id="tone" name="tone">
+
+                        <option value="Professional"
+                            {% if tone == "Professional" %}selected{% endif %}>
+                            Professional
+                        </option>
+
+                        <option value="Friendly"
+                            {% if tone == "Friendly" %}selected{% endif %}>
+                            Friendly
+                        </option>
+
+                        <option value="Formal"
+                            {% if tone == "Formal" %}selected{% endif %}>
+                            Formal
+                        </option>
+
+                    </select>
+
+
+                    <button type="submit">
+                        ✨ Generate Email
+                    </button>
+
+                </form>
+
+            </div>
+
+
+            <!-- Generated Email -->
+            <div class="result-section">
+
+                <h2>Generated Email</h2>
+
+                {% if email %}
+
+                <div class="email-box">
+
+                    <div class="email-header">
+                        <span>AI Generated Email</span>
+
+                        <button
+                            type="button"
+                            onclick="copyEmail()"
+                            class="copy-btn">
+                            📋 Copy
+                        </button>
+                    </div>
+
+                    <div id="generatedEmail" class="email-content">
+                        {{ email }}
+                    </div>
+
+                </div>
+
+                {% else %}
+
+                <div class="empty-state">
+
+                    <div class="empty-icon">📨</div>
+
+                    <h3>Your generated email will appear here</h3>
+
+                    <p>
+                        Enter the recipient, email purpose and preferred
+                        tone, then click "Generate Email".
+                    </p>
+
+                </div>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        function copyEmail() {
+
+            const email =
+                document.getElementById("generatedEmail").innerText;
+
+            navigator.clipboard.writeText(email);
+
+            const button =
+                document.querySelector(".copy-btn");
+
+            button.innerText = "✓ Copied!";
+
+            setTimeout(() => {
+                button.innerText = "📋 Copy";
+            }, 2000);
+        }
+
+    </script>
+
+</body>
+</html>
