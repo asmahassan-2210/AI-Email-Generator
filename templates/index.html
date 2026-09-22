@@ -1,37 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>AI Email Generator</title>
 
-    <link rel="stylesheet" href="{{ url_for('static', path='style.css') }}">
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 
 <body>
 
-    <div class="container">
+<div class="page">
 
-        <div class="header">
-            <div class="icon">✉️</div>
+    <!-- HEADER -->
+    <header class="header">
 
-            <h1>AI Email Generator</h1>
-
-            <p>
-                Generate professional and personalized emails using AI
-            </p>
+        <div class="logo">
+            ✉️
         </div>
 
+        <h1>
+            AI Email Generator
+        </h1>
 
-        <div class="content">
+        <p>
+            Generate professional and personalized emails using AI
+        </p>
 
-            <!-- Input Form -->
-            <div class="form-section">
+    </header>
 
-                <h2>Create Your Email</h2>
 
-                <form action="/generate" method="post">
+    <!-- MAIN CONTENT -->
+    <main class="main-container">
+
+        <!-- LEFT SIDE -->
+        <section class="card">
+
+            <div class="card-title">
+
+                <span class="title-icon">
+                    📝
+                </span>
+
+                <div>
+                    <h2>
+                        Create Your Email
+                    </h2>
+
+                    <p>
+                        Enter your details below
+                    </p>
+                </div>
+
+            </div>
+
+
+            <!-- FORM -->
+            <form id="emailForm">
+
+                <!-- RECIPIENT -->
+                <div class="form-group">
 
                     <label for="recipient">
                         Recipient Name
@@ -40,12 +70,15 @@
                     <input
                         type="text"
                         id="recipient"
-                        name="recipient"
                         placeholder="e.g. Mr. Ahmed Khan"
-                        value="{{ recipient }}"
                         required
                     >
 
+                </div>
+
+
+                <!-- PURPOSE -->
+                <div class="form-group">
 
                     <label for="purpose">
                         Email Purpose
@@ -53,116 +86,152 @@
 
                     <textarea
                         id="purpose"
-                        name="purpose"
-                        rows="5"
+                        rows="6"
                         placeholder="Describe what you want to write about..."
                         required
-                    >{{ purpose }}</textarea>
+                    ></textarea>
 
+                </div>
+
+
+                <!-- TONE -->
+                <div class="form-group">
 
                     <label for="tone">
                         Select Tone
                     </label>
 
-                    <select id="tone" name="tone">
+                    <select id="tone">
 
-                        <option value="Professional"
-                            {% if tone == "Professional" %}selected{% endif %}>
+                        <option value="Professional">
                             Professional
                         </option>
 
-                        <option value="Friendly"
-                            {% if tone == "Friendly" %}selected{% endif %}>
+                        <option value="Friendly">
                             Friendly
                         </option>
 
-                        <option value="Formal"
-                            {% if tone == "Formal" %}selected{% endif %}>
+                        <option value="Formal">
                             Formal
                         </option>
 
                     </select>
 
-
-                    <button type="submit">
-                        ✨ Generate Email
-                    </button>
-
-                </form>
-
-            </div>
-
-
-            <!-- Generated Email -->
-            <div class="result-section">
-
-                <h2>Generated Email</h2>
-
-                {% if email %}
-
-                <div class="email-box">
-
-                    <div class="email-header">
-                        <span>AI Generated Email</span>
-
-                        <button
-                            type="button"
-                            onclick="copyEmail()"
-                            class="copy-btn">
-                            📋 Copy
-                        </button>
-                    </div>
-
-                    <div id="generatedEmail" class="email-content">
-                        {{ email }}
-                    </div>
-
                 </div>
 
-                {% else %}
 
-                <div class="empty-state">
+                <!-- GENERATE BUTTON -->
+                <button
+                    type="submit"
+                    id="generateButton"
+                >
 
-                    <div class="empty-icon">📨</div>
+                    <span id="buttonText">
+                        ✨ Generate Email
+                    </span>
 
-                    <h3>Your generated email will appear here</h3>
+                </button>
+
+            </form>
+
+        </section>
+
+
+        <!-- RIGHT SIDE -->
+        <section class="card result-card">
+
+            <div class="card-title">
+
+                <span class="title-icon">
+                    ✉️
+                </span>
+
+                <div>
+
+                    <h2>
+                        Generated Email
+                    </h2>
 
                     <p>
-                        Enter the recipient, email purpose and preferred
-                        tone, then click "Generate Email".
+                        Your AI-generated email will appear here
                     </p>
 
                 </div>
 
-                {% endif %}
+            </div>
+
+
+            <!-- EMPTY STATE -->
+            <div
+                id="emptyState"
+                class="empty-state"
+            >
+
+                <div class="empty-icon">
+                    📨
+                </div>
+
+                <h3>
+                    No email generated yet
+                </h3>
+
+                <p>
+                    Fill in the form and click
+                    "Generate Email" to create your email.
+                </p>
 
             </div>
 
-        </div>
 
-    </div>
+            <!-- GENERATED RESULT -->
+            <div
+                id="resultContainer"
+                class="result-container hidden"
+            >
+
+                <div class="result-header">
+
+                    <span>
+                        ✨ AI Generated Email
+                    </span>
+
+                    <button
+                        type="button"
+                        id="copyButton"
+                    >
+                        📋 Copy
+                    </button>
+
+                </div>
 
 
-    <script>
+                <div
+                    id="generatedEmail"
+                    class="generated-email"
+                ></div>
 
-        function copyEmail() {
+            </div>
 
-            const email =
-                document.getElementById("generatedEmail").innerText;
+        </section>
 
-            navigator.clipboard.writeText(email);
+    </main>
 
-            const button =
-                document.querySelector(".copy-btn");
 
-            button.innerText = "✓ Copied!";
+    <!-- FOOTER -->
+    <footer>
 
-            setTimeout(() => {
-                button.innerText = "📋 Copy";
-            }, 2000);
-        }
+        <p>
+            AI Email Generator • FastAPI + Gemini
+        </p>
 
-    </script>
+    </footer>
+
+</div>
+
+
+<!-- JAVASCRIPT -->
+<script src="/static/script.js"></script>
 
 </body>
+
 </html>
